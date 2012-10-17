@@ -18,8 +18,8 @@ setup(
     packages = find_packages(),
     include_package_data = False,
     install_requires = [
-        'djorm-ext-core >= 4.0',
-        'djorm-ext-expressions >= 4.0',
+        'djorm-ext-core >= 0.4.0',
+        'djorm-ext-expressions >= 0.4.0',
     ],
     zip_safe = False,
     classifiers = [
