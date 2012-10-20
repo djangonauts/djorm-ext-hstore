@@ -31,7 +31,6 @@ class TestDictionaryField(TestCase):
 
         obj = DataBag.objects.get(name="alpha")
 
-
     def test_empty_instantiation(self):
         bag = DataBag.objects.create(name='bag')
         self.assertTrue(isinstance(bag.data, dict))

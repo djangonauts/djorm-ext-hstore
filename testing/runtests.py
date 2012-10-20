@@ -2,6 +2,7 @@
 
 import os, sys
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "settings")
+sys.path.insert(0, '..')
 
 from django.core.management import call_command
 
