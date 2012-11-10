@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+import sys
+
 from django.db.models.sql.constants import SINGLE
 from django.db.models.query_utils import QueryWrapper
 from django.db.models.query import QuerySet
@@ -93,7 +95,10 @@ class HStoreManager(HStoreManagerMixin, ExpressionManagerMixin, models.Manager):
 from psycopg2.extras import register_hstore
 
 def register_hstore_handler(connection, **kwargs):
-    register_hstore(connection.cursor(), globally=True, unicode=True)
+    if sys.version_info.major < 3:
+        register_hstore(connection.cursor(), globally=True, unicode=True)
+    else:
+        register_hstore(connection.cursor(), globally=True)
 
 from djorm_core.models import connection_handler
 connection_handler.attach_handler(register_hstore_handler, vendor="postgresql", unique=True)

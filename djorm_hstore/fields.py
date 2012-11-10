@@ -3,6 +3,15 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
 from . import forms, util
+import sys
+
+if sys.version_info.major < 3:
+    text_type = unicode
+    binary_type = str
+else:
+    text_type = str
+    binary_type = bytes
+
 
 class HStoreDictionary(dict):
     """
@@ -35,6 +44,10 @@ class HStoreField(models.Field):
     _attribute_class = HStoreDictionary
     _descriptor_class = HStoreDescriptor
 
+    def __init__(self, *args, **kwargs):
+        kwargs.setdefault('default', lambda: {})
+        super(HStoreField, self).__init__(*args, **kwargs)
+
     def contribute_to_class(self, cls, name):
         super(HStoreField, self).contribute_to_class(cls, name)
         setattr(cls, self.name, self._descriptor_class(self))
@@ -42,6 +55,15 @@ class HStoreField(models.Field):
     def db_type(self, connection=None):
         return 'hstore'
 
+    def get_prep_value(self, data):
+        if not isinstance(data, (dict, HStoreDictionary)):
+            return data
+
+        for key in data:
+            if not isinstance(data[key], (text_type, binary_type)):
+                data[key] = text_type(data[key])
+
+        return data
 
 class DictionaryField(HStoreField):
     description = _("A python dictionary in a postgresql hstore field.")
