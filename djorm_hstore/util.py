@@ -1,4 +1,9 @@
+
 from django.core.exceptions import ObjectDoesNotExist
+
+import sys
+if sys.version_info.major > 2:
+    basestring = str
 
 def acquire_reference(reference):
     try:
@@ -17,7 +22,7 @@ def identify_instance(instance):
 
 def serialize_references(references):
     refs = {}
-    for key, instance in references.iteritems():
+    for key, instance in references.items():
         if not isinstance(instance, basestring):
             refs[key] = identify_instance(instance)
         else:
@@ -27,7 +32,7 @@ def serialize_references(references):
 
 def unserialize_references(references):
     refs = {}
-    for key, reference in references.iteritems():
+    for key, reference in references.items():
         if isinstance(reference, basestring):
             refs[key] = acquire_reference(reference)
         else:

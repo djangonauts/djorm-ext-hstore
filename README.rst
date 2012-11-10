@@ -2,7 +2,9 @@
 djorm-ext-hstore
 ================
 
-Hstore module of django orm extensions package (collection of third party plugins build in one unified package). Is the library which integrates the `hstore`_ extension of PostgreSQL into Django,
+Is the library which integrates the `hstore`_ extension of PostgreSQL into Django,
+
+Compatible with django: 1.4 and posible with 1.3. Django 1.5 and python3.2+ compatibility coming soon.
 
 Limitations and notes
 ---------------------
