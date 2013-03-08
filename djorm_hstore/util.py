@@ -2,7 +2,8 @@
 from django.core.exceptions import ObjectDoesNotExist
 
 import sys
-if sys.version_info.major > 2:
+
+if sys.version_info[0] > 2:
     basestring = str
 
 def acquire_reference(reference):

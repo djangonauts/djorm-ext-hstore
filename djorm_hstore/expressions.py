@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import sys
-if sys.version_info.major > 2:
+if sys.version_info[0] > 2:
     basestring = str
 
 from djorm_expressions.base import SqlExpression

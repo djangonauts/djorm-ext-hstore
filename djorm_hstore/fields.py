@@ -5,7 +5,7 @@ from django.utils.translation import ugettext_lazy as _
 from . import forms, util
 import sys
 
-if sys.version_info.major < 3:
+if sys.version_info[0] < 3:
     text_type = unicode
     binary_type = str
 else:
