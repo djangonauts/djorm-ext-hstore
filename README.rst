@@ -2,15 +2,16 @@
 djorm-ext-hstore
 ================
 
-Is the library which integrates the `hstore`_ extension of PostgreSQL into Django,
+Is the library which integrates the hstore extension of PostgreSQL into Django,
 
-Compatible with django: 1.4 and posible with 1.3. Django 1.5 and python3.2+ compatibility coming soon.
+Compatible with django >= 1.4
 
 Limitations and notes
 ---------------------
 
 - PostgreSQL's implementation of hstore has no concept of type; it stores a mapping of string keys to
   string values. This library makes no attempt to coerce keys or values to strings.
+- Hstore extension is not automatically installed on use this package. You must install it manually. (For execute tests, you must install hstore extension on template1 database.
 
 
 Classes
