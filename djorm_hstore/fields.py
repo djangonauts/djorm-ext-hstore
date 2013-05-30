@@ -29,6 +29,11 @@ class HStoreDictionary(dict):
         queryset = self.instance._base_manager.get_query_set()
         queryset.filter(pk=self.instance.pk).hremove(self.field.name, keys)
 
+    def __getstate__(self):
+        """
+        Returns pickable Python dict.
+        """
+        return dict(self)
 
 class HStoreDescriptor(models.fields.subclassing.Creator):
     def __set__(self, obj, value):
