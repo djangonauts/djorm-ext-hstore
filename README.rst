@@ -4,7 +4,10 @@ djorm-ext-hstore
 
 Is the library which integrates the hstore extension of PostgreSQL into Django,
 
-Compatible with django >= 1.4
+Compatible with:
+
+* django: 1.4, 1.5, 1.6
+* python: 2.7 y 3.3+
 
 Limitations and notes
 ---------------------
