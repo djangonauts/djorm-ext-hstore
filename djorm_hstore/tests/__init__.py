@@ -45,6 +45,20 @@ class TestDictionaryField(TestCase):
         instance = DataBag.objects.filter(name='beta')[0]
         self.assertEqual(instance, beta)
 
+    def test_changing_attributes(self):
+        data = {"website": "http://day9.tv",
+                "about": "I am happy"}
+
+        alpha = DataBag.objects.create(name='alpha')
+
+        for key, value in data.items():
+            alpha.data[key] = value
+
+        alpha.save()
+        alpha = DataBag.objects.get(pk=alpha.id)
+        for key, value in data.items():
+            self.assertEqual(alpha.data[key], value)
+
     def test_annotations(self):
         self._create_bitfield_bags()
         queryset = DataBag.objects\
