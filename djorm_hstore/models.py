@@ -42,7 +42,7 @@ class HStoreQuerysetMixin(object):
         result = query.get_compiler(self.db).execute_sql(SINGLE)
         if result and result[0]:
             field = self.model._meta.get_field_by_name(attr)[0]
-            return dict((key, field._value_to_python(value)) for key, value in result[0].iteritems())
+            return dict((key, field._value_to_python(value)) for key, value in result[0].items())
         return {}
 
     @update_query

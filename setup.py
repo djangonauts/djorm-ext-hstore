@@ -6,7 +6,7 @@ Hstore module of django orm extensions package (collection of third party plugin
 
 setup(
     name = "djorm-ext-hstore",
-    version = '0.4.3',
+    version = '0.4.4',
     url = 'https://github.com/niwibe/djorm-ext-hstore',
     license = 'BSD',
     platforms = ['OS Independent'],
@@ -30,9 +30,8 @@ setup(
         'Operating System :: OS Independent',
         'Topic :: Internet :: WWW/HTTP',
         "Programming Language :: Python",
-        "Programming Language :: Python :: 2.6",
         "Programming Language :: Python :: 2.7",
-        #"Programming Language :: Python :: 3.2",
-        #"Programming Language :: Python :: 3.3",
+        "Programming Language :: Python :: 3",
+        "Programming Language :: Python :: 3.3",
     ]
 )

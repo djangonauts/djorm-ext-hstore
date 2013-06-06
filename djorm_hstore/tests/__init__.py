@@ -20,9 +20,9 @@ class TestDictionaryField(TestCase):
 
     def _create_bitfield_bags(self):
         # create dictionaries with bits as dictionary keys (i.e. bag5 = { 'b0':'1', 'b2':'1'})
-        for i in xrange(10):
+        for i in range(10):
             DataBag.objects.create(name='bag%d' % (i,),
-               data=dict(('b%d' % (bit,), '1') for bit in xrange(4) if (1 << bit) & i))
+               data=dict(('b%d' % (bit,), '1') for bit in range(4) if (1 << bit) & i))
 
     def test_regression_handler(self):
         self._create_bags()
