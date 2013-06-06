@@ -59,6 +59,27 @@ class TestDictionaryField(TestCase):
         for key, value in data.items():
             self.assertEqual(alpha.data[key], value)
 
+    def test_changing_attributes_with_two_databases(self):
+        data = {"website": "http://day9.tv",
+                "about": "I am happy"}
+
+        alpha1 = DataBag.objects.create(name='alpha')
+        alpha2 = DataBag.objects.using('other').create(name='alpha')
+
+        for key, value in data.items():
+            alpha1.data[key] = value
+            alpha2.data[key] = value
+
+        alpha1.save()
+        alpha2.save()
+
+        alpha1 = DataBag.objects.get(pk=alpha1.id)
+        alpha1 = DataBag.objects.using("other").get(pk=alpha2.id)
+
+        for key, value in data.items():
+            self.assertEqual(alpha1.data[key], value)
+            self.assertEqual(alpha2.data[key], value)
+
     def test_annotations(self):
         self._create_bitfield_bags()
         queryset = DataBag.objects\
