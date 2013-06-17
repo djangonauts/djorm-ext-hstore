@@ -89,6 +89,11 @@ class DictionaryField(HStoreField):
             return json.loads(value)
         return value or {}
 
+    def value_to_string(self, obj):
+        value = self._get_val_from_obj(obj)
+        prepped = self.get_prep_value(value)
+        return json.dumps(prepped)
+
     def _value_to_python(self, value):
         return value
 
