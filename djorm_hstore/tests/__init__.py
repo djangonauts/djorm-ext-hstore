@@ -296,7 +296,7 @@ class TestDictionaryField(TestCase):
         bag = DataBag.objects.create(name='bag')
         s = serializers.serialize('json', [bag])
         for b in serializers.deserialize('json', s):
-            self.assertEqual(b.__class__, DataBag)
+            self.assertEqual(b.object.__class__, DataBag)
 
 
 class TestReferencesField(TestCase):
