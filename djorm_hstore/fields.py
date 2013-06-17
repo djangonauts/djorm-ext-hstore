@@ -4,6 +4,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from . import forms, util
 import sys
+import json
 
 if sys.version_info[0] < 3:
     text_type = unicode
@@ -84,6 +85,8 @@ class DictionaryField(HStoreField):
         return value
 
     def to_python(self, value):
+        if isinstance(value, basestring):
+            return json.loads(value)
         return value or {}
 
     def _value_to_python(self, value):
