@@ -36,6 +36,22 @@ class TestDictionaryField(TestCase):
         self.assertTrue(isinstance(bag.data, dict))
         self.assertEqual(bag.data, {})
 
+    def test_prep_value(self):
+        # all non str/unicode values (except None) are converted to a text_type
+        data = {
+            "zero": None,
+            "one": 1,
+            "two": "2",
+        }
+        instance = DataBag.objects.create(name='numbers', data=data)
+        # SQL representation: "one"=>"1", "two"=>"2", "zero"=>NULL
+        expected_data = {
+            "zero": None,
+            "one": u"1",
+            "two": "2",
+        }
+        self.assertEqual(expected_data, instance.data)
+
     def test_named_querying(self):
         alpha, beta = self._create_bags()
 
