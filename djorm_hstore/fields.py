@@ -65,10 +65,13 @@ class HStoreField(models.Field):
             return data
 
         for key in data:
+            if data[key] is None:
+                continue
             if not isinstance(data[key], (text_type, binary_type)):
                 data[key] = text_type(data[key])
 
         return data
+
 
 class DictionaryField(HStoreField):
     description = _("A python dictionary in a postgresql hstore field.")
