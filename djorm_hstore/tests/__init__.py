@@ -3,6 +3,7 @@
 from django.db import connections
 from django.db.models.aggregates import Count
 from django.utils.unittest import TestCase
+from django.core import serializers
 
 from ..functions import HstoreKeys, HstoreSlice, HstorePeek
 from ..expressions import HstoreExpression
@@ -290,6 +291,12 @@ class TestDictionaryField(TestCase):
         self.assertTrue(DataBag.objects.get(data={}))
         self.assertTrue(DataBag.objects.filter(data={}))
         self.assertTrue(DataBag.objects.where(HstoreExpression("data").contains({})))
+
+    def test_serialize_deserialize(self):
+        bag = DataBag(name='bag', data={"a": "1", "b": "2"})
+        s = serializers.serialize('json', [bag])
+        for b in serializers.deserialize('json', s):
+            self.assertEqual(b.object.data, {"a": "1", "b": "2"})
 
 
 class TestReferencesField(TestCase):
