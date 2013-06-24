@@ -6,6 +6,13 @@ from . import forms, util
 import sys
 import json
 
+if sys.version_info[0] < 3:
+    text_type = unicode
+    binary_type = str
+else:
+    text_type = str
+    binary_type = bytes
+
 
 class HStoreDictionary(dict):
     """
@@ -73,6 +80,14 @@ class DictionaryField(HStoreField):
     def formfield(self, **params):
         params['form_class'] = forms.DictionaryField
         return super(DictionaryField, self).formfield(**params)
+
+    def value_from_object(self, obj):
+        """
+        Return a sorted JSON string.
+        """
+        value = super(DictionaryField, self).value_from_object(obj)
+        if value is not None:
+            return json.dumps(value, sort_keys=True)
 
     def get_prep_lookup(self, lookup, value):
         return value
