@@ -9,6 +9,14 @@ class JsonMixin(object):
     def to_python(self, value):
         return json.loads(value)
 
+    def value_from_datadict(self, data, files, name):
+        value = data.get(name, None)
+        try:
+            # load/re-dump to sort by key for has_changed comparison
+            value = json.dumps(json.loads(value), sort_keys=True)
+        except (TypeError, ValueError):
+            pass
+        return value
 
 
 class DictionaryFieldWidget(JsonMixin, AdminTextareaWidget):
