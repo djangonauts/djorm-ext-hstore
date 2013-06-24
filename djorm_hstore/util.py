@@ -1,10 +1,19 @@
+# -*- coding: utf-8 -*-
 
 from django.core.exceptions import ObjectDoesNotExist
 
 import sys
 
-if sys.version_info[0] > 2:
-    basestring = str
+if sys.version_info[0] == 3:
+    string_type = str
+    bytes_type = bytes
+    basestring = (str,)
+
+else:
+    string_type = unicode
+    bytes_type = str
+    basestring = (str, unicode)
+
 
 def acquire_reference(reference):
     try:
@@ -17,9 +26,11 @@ def acquire_reference(reference):
     except Exception:
         raise ValueError
 
+
 def identify_instance(instance):
     implementation = type(instance)
     return '%s.%s:%s' % (implementation.__module__, implementation.__name__, instance.pk)
+
 
 def serialize_references(references):
     refs = {}
@@ -30,6 +41,7 @@ def serialize_references(references):
             refs[key] = instance
     else:
         return refs
+
 
 def unserialize_references(references):
     refs = {}

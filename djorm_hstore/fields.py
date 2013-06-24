@@ -6,13 +6,6 @@ from . import forms, util
 import sys
 import json
 
-if sys.version_info[0] < 3:
-    text_type = unicode
-    binary_type = str
-else:
-    text_type = str
-    binary_type = bytes
-
 
 class HStoreDictionary(dict):
     """
@@ -68,8 +61,8 @@ class HStoreField(models.Field):
         for key in data:
             if data[key] is None:
                 continue
-            if not isinstance(data[key], (text_type, binary_type)):
-                data[key] = text_type(data[key])
+            if not isinstance(data[key], (util.string_type, util.bytes_type)):
+                data[key] = util.string_type(data[key])
 
         return data
 
@@ -85,7 +78,7 @@ class DictionaryField(HStoreField):
         return value
 
     def to_python(self, value):
-        if isinstance(value, basestring):
+        if isinstance(value, util.basestring):
             return json.loads(value)
         return value or {}
 
