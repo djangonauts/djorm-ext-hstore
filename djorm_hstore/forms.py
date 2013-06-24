@@ -9,13 +9,15 @@ class JsonMixin(object):
     def to_python(self, value):
         return json.loads(value)
 
-    def render(self, name, value, attrs=None):
-        value = json.dumps(value, sort_keys=True, indent=2)
-        return super(JsonMixin, self).render(name, value, attrs)
 
 
 class DictionaryFieldWidget(JsonMixin, AdminTextareaWidget):
-    pass
+    def render(self, name, value, attrs=None):
+        if value:
+            # a DictionaryField (model field) returns a string value via
+            # value_from_object(), load and re-dump for indentation
+            value = json.dumps(json.loads(value), sort_keys=True, indent=2)
+        return super(JsonMixin, self).render(name, value, attrs)
 
 
 class ReferencesFieldWidget(JsonMixin, AdminTextareaWidget):
