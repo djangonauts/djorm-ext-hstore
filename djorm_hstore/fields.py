@@ -93,7 +93,7 @@ class DictionaryField(HStoreField):
         return value
 
     def to_python(self, value):
-        if isinstance(value, util.basestring):
+        if isinstance(value, util.string_type) and value:
             return json.loads(value)
         return value or {}
 
