@@ -1,5 +1,7 @@
 from django.forms import Field
 from django.contrib.admin.widgets import AdminTextareaWidget
+from django.core.exceptions import ValidationError
+from django.utils.translation import ugettext_lazy as _
 
 from . import util
 import json
@@ -7,15 +9,31 @@ import json
 
 class JsonMixin(object):
     def to_python(self, value):
-        return json.loads(value)
+        try:
+            if value is not None:
+                return json.loads(value)
+        except TypeError:
+            raise ValidationError(_(u'String type is required.'))
+        except ValueError:
+            raise ValidationError(_(u'Enter a valid value.'))
 
-    def render(self, name, value, attrs=None):
-        value = json.dumps(value, sort_keys=True, indent=2)
-        return super(JsonMixin, self).render(name, value, attrs)
+    def value_from_datadict(self, data, files, name):
+        value = data.get(name, None)
+        try:
+            # load/re-dump to sort by key for has_changed comparison
+            value = json.dumps(json.loads(value), sort_keys=True)
+        except (TypeError, ValueError):
+            pass
+        return value
 
 
 class DictionaryFieldWidget(JsonMixin, AdminTextareaWidget):
-    pass
+    def render(self, name, value, attrs=None):
+        if value:
+            # a DictionaryField (model field) returns a string value via
+            # value_from_object(), load and re-dump for indentation
+            value = json.dumps(json.loads(value), sort_keys=True, indent=2)
+        return super(JsonMixin, self).render(name, value, attrs)
 
 
 class ReferencesFieldWidget(JsonMixin, AdminTextareaWidget):
@@ -30,6 +48,7 @@ class DictionaryField(JsonMixin, Field):
     """
     def __init__(self, **params):
         params['widget'] = DictionaryFieldWidget
+        params['initial'] = u'{}'
         super(DictionaryField, self).__init__(**params)
 
 

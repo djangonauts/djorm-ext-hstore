@@ -6,6 +6,13 @@ from . import forms, util
 import sys
 import json
 
+if sys.version_info[0] < 3:
+    text_type = unicode
+    binary_type = str
+else:
+    text_type = str
+    binary_type = bytes
+
 
 class HStoreDictionary(dict):
     """
@@ -29,6 +36,7 @@ class HStoreDictionary(dict):
         """
         return dict(self)
 
+
 class HStoreDescriptor(models.fields.subclassing.Creator):
     def __set__(self, obj, value):
         value = self.field.to_python(value)
@@ -44,7 +52,6 @@ class HStoreField(models.Field):
     _descriptor_class = HStoreDescriptor
 
     def __init__(self, *args, **kwargs):
-        kwargs.setdefault('default', lambda: {})
         super(HStoreField, self).__init__(*args, **kwargs)
 
     def contribute_to_class(self, cls, name):
@@ -74,11 +81,19 @@ class DictionaryField(HStoreField):
         params['form_class'] = forms.DictionaryField
         return super(DictionaryField, self).formfield(**params)
 
+    def value_from_object(self, obj):
+        """
+        Return a sorted JSON string.
+        """
+        value = super(DictionaryField, self).value_from_object(obj)
+        if value is not None:
+            return json.dumps(value, sort_keys=True)
+
     def get_prep_lookup(self, lookup, value):
         return value
 
     def to_python(self, value):
-        if isinstance(value, util.basestring):
+        if isinstance(value, util.string_type) and value:
             return json.loads(value)
         return value or {}
 
