@@ -30,6 +30,7 @@ class DictionaryField(JsonMixin, Field):
     """
     def __init__(self, **params):
         params['widget'] = DictionaryFieldWidget
+        params['initial'] = u'{}'
         super(DictionaryField, self).__init__(**params)
 
 

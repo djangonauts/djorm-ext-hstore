@@ -29,6 +29,7 @@ class HStoreDictionary(dict):
         """
         return dict(self)
 
+
 class HStoreDescriptor(models.fields.subclassing.Creator):
     def __set__(self, obj, value):
         value = self.field.to_python(value)
@@ -44,7 +45,6 @@ class HStoreField(models.Field):
     _descriptor_class = HStoreDescriptor
 
     def __init__(self, *args, **kwargs):
-        kwargs.setdefault('default', lambda: {})
         super(HStoreField, self).__init__(*args, **kwargs)
 
     def contribute_to_class(self, cls, name):
