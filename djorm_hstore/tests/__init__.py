@@ -9,6 +9,53 @@ from ..functions import HstoreKeys, HstoreSlice, HstorePeek
 from ..expressions import HstoreExpression
 
 from .models import DataBag, Ref, RefsBag
+from .forms import DataBagForm
+
+
+class TestModelForm(TestCase):
+
+    def test_create_bags(self):
+        # hstore data must be a json loadable string
+        bag_data = {'name': 'bag1', 'data': {}}
+        form = DataBagForm(bag_data)
+        self.assertFalse(form.is_valid())
+        self.assertEqual(form.errors, {'data': [u'String type is required.']})
+
+        # empty string is not json loadable
+        bag_data = {'name': 'bag1', 'data': ""}
+        form = DataBagForm(bag_data)
+        self.assertFalse(form.is_valid())
+        self.assertEqual(form.errors, {'data': [u'Enter a valid value.']})
+
+        # data is a required field in the model
+        bag_data = {'name': 'bag1', 'data': None}
+        form = DataBagForm(bag_data)
+        self.assertFalse(form.is_valid())
+        self.assertEqual(form.errors, {'data': [u'This field is required.']})
+
+        # an empty dict equals an empty value
+        bag_data = {'name': 'bag1', 'data': '{}'}
+        form = DataBagForm(bag_data)
+        self.assertFalse(form.is_valid())
+        self.assertEqual(form.errors, {'data': [u'This field is required.']})
+
+        # success
+        bag_data = {'name': 'bag1', 'data': '{"a": "1", "b": null}'}
+        form = DataBagForm(bag_data)
+        self.assertTrue(form.is_valid())
+
+        # has_changed check, no change, with unsorted input
+        bag1 = form.save()
+        bag_data = {'name': 'bag1', 'data': '{"b": null, "a": "1"}'}
+        form = DataBagForm(bag_data, instance=bag1)
+        self.assertFalse(form.has_changed())
+
+        # has_changed check, with change
+        bag_data = {'name': 'bag1', 'data': '{"b": null, "a": "2"}'}
+        form = DataBagForm(bag_data, instance=bag1)
+        self.assertTrue(form.has_changed())
+        self.assertEqual(form.changed_data, ['data'])
+
 
 class TestDictionaryField(TestCase):
     def setUp(self):
