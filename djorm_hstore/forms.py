@@ -1,5 +1,7 @@
 from django.forms import Field
 from django.contrib.admin.widgets import AdminTextareaWidget
+from django.core.exceptions import ValidationError
+from django.utils.translation import ugettext_lazy as _
 
 from . import util
 import json
@@ -7,7 +9,13 @@ import json
 
 class JsonMixin(object):
     def to_python(self, value):
-        return json.loads(value)
+        try:
+            if value is not None:
+                return json.loads(value)
+        except TypeError:
+            raise ValidationError(_(u'String type is required.'))
+        except ValueError:
+            raise ValidationError(_(u'Enter a valid value.'))
 
     def value_from_datadict(self, data, files, name):
         value = data.get(name, None)
