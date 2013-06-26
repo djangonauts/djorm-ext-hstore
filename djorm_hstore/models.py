@@ -101,4 +101,4 @@ def register_hstore_handler(connection, **kwargs):
         register_hstore(connection.cursor(), globally=True)
 
 from djorm_core.models import connection_handler
-connection_handler.attach_handler(register_hstore_handler, vendor="postgresql", unique=True)
+connection_handler.attach_handler(register_hstore_handler, vendor="postgresql")
