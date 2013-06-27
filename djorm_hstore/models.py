@@ -96,9 +96,9 @@ from psycopg2.extras import register_hstore
 
 def register_hstore_handler(connection, **kwargs):
     if sys.version_info[0] < 3:
-        register_hstore(connection.cursor(), globally=True, unicode=True)
+        register_hstore(connection.connection, globally=True, unicode=True)
     else:
-        register_hstore(connection.cursor(), globally=True)
+        register_hstore(connection.connection, globally=True)
 
 from djorm_core.models import connection_handler
 connection_handler.attach_handler(register_hstore_handler, vendor="postgresql")
