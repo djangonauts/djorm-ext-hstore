@@ -24,7 +24,7 @@ Limitation for running tests
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 This limitatation is affects bugs #11 and #12 (and can not be solved with other aproach
-than installing hstore on template1 database of postgredsql.
+than installing hstore on template1 database.
 
 The complete explanation, a lot of thanks to Florian Demmer:
 
