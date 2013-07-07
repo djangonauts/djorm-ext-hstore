@@ -9,12 +9,49 @@ Compatible with:
 * django: 1.4, 1.5, 1.6
 * python: 2.7 y 3.3+
 
+
 Limitations and notes
 ---------------------
 
 - PostgreSQL's implementation of hstore has no concept of type; it stores a mapping of string keys to
   string values. This library makes no attempt to coerce keys or values to strings.
 - Hstore extension is not automatically installed on use this package. You must install it manually. (For execute tests, you must install hstore extension on template1 database.
+
+- For run tests, hstore extension must be installed on template1 database. (Short version)
+
+
+Limitation for running tests
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This limitatation is affects bugs #11 and #12 (and can not be solved with other aproach
+than installing hstore on template1 database of postgredsql.
+
+The complete explanation, a lot of thanks to Florian Demmer:
+
+    i think i got it... the oid is the problem and how and when it is determined...
+    and maybe a little how the tests are set up... and generally it is a multi-db issue.
+
+    in test settings.py two databases are configured, but while running tests of course
+    django creates new "test_*" databases (from "template1"). however initially django
+    connects to one of the configured "test" or "test2" databases. i don't know which.
+    but on this initial connect the connect-signal triggers the extension registration,
+    which determines the hstore oid and uses it to register the extension globally.
+
+    so the extension is now registerd with the oid from "test" or "test2". if one had
+    added the hstore extension to "template1" before creating "test" and "test2" this
+    would be no problem, as both would have the hstore oid copied from "template1".
+
+    so in my case i did not have "template1" set up on my notebook when i created the
+    test databases and both have different hstore oids and tests fail. i did have it set
+    up on my pc and the test databases have the same hstore oid and test work.
+
+    so, what does it mean!?
+
+    using unique=False works around this problem by reloading the oid for every connection.
+    the more i think about it, this is a very, very ugly workaround.
+
+
+I strongly recommend install hstore on template1 for avoid strange behavior.
 
 
 Classes
