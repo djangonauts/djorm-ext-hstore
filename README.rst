@@ -64,7 +64,7 @@ The library provides three principal classes:
 ``djorm_hstore.fields.ReferencesField``
     An ORM field which builds on DictionaryField to store a mapping of string keys to
     django object references, much like ForeignKey.
-``djorm_hstor.models.HStoreManager``
+``djorm_hstore.models.HStoreManager``
     An ORM manager which provides much of the query functionality of the library.
 
 **NOTE**: the predefined hstore manager inherits all functionality of djorm-ext-expressions module (which is part of django orm extensions package)
