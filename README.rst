@@ -156,8 +156,8 @@ we can also use annotations, and then we can filter for them.
 
 
 
-Pscopg2 hstore registration
----------------------------
+Psycopg2 hstore registration
+----------------------------
 
 If for some reason you have to use djorm_hstore along databases that don't have
 hstore extension installed, you can skip hstore registration by setting
