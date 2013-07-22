@@ -95,6 +95,8 @@ class HStoreManager(HStoreManagerMixin, ExpressionManagerMixin, models.Manager):
 from psycopg2.extras import register_hstore
 
 def register_hstore_handler(connection, **kwargs):
+    if not connection.settings_dict.get('HAS_HSTORE', True):
+        return
     if sys.version_info[0] < 3:
         register_hstore(connection.connection, globally=True, unicode=True)
     else:
