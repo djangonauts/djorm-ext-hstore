@@ -47,9 +47,12 @@ class DictionaryField(JsonMixin, Field):
     A dictionary form field.
     """
     def __init__(self, **params):
-        params['widget'] = DictionaryFieldWidget
-        params['initial'] = u'{}'
-        super(DictionaryField, self).__init__(**params)
+        defaults = {
+            'widget': DictionaryFieldWidget,
+            'initial': u'{}',
+        }
+        defaults.update(params)
+        super(DictionaryField, self).__init__(**defaults)
 
 
 class ReferencesField(JsonMixin, Field):
