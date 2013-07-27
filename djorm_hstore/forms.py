@@ -32,7 +32,11 @@ class DictionaryFieldWidget(JsonMixin, AdminTextareaWidget):
         if value:
             # a DictionaryField (model field) returns a string value via
             # value_from_object(), load and re-dump for indentation
-            value = json.dumps(json.loads(value), sort_keys=True, indent=2)
+            try:
+                value = json.dumps(json.loads(value), sort_keys=True, indent=2)
+            except ValueError:
+                # Skip formatting if value is not valid JSON
+                pass
         return super(JsonMixin, self).render(name, value, attrs)
 
 
@@ -47,9 +51,12 @@ class DictionaryField(JsonMixin, Field):
     A dictionary form field.
     """
     def __init__(self, **params):
-        params['widget'] = DictionaryFieldWidget
-        params['initial'] = u'{}'
-        super(DictionaryField, self).__init__(**params)
+        defaults = {
+            'widget': DictionaryFieldWidget,
+            'initial': u'{}',
+        }
+        defaults.update(params)
+        super(DictionaryField, self).__init__(**defaults)
 
 
 class ReferencesField(JsonMixin, Field):
