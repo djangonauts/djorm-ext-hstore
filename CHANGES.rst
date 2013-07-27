@@ -1,6 +1,28 @@
 CHANGES
 =======
 
+Version 0.5.0
+-------------
+
+- Support null values.
+- Add serialization support.
+- Add django admin support.
+- Other minor fixes.
+
+
+Version 0.4.4
+-------------
+
+- Fixed python3 compatibility issues.
+- HStoreDictionary field is now pickleable.
+
+
+Version 0.4.3
+-------------
+
+- Fixed python2.6 compatibility.
+
+
 Version 0.4.2
 -------------
 
