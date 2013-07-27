@@ -6,7 +6,7 @@ Hstore module of django orm extensions package (collection of third party plugin
 
 setup(
     name = "djorm-ext-hstore",
-    version = '0.4.4',
+    version = '0.5',
     url = 'https://github.com/niwibe/djorm-ext-hstore',
     license = 'BSD',
     platforms = ['OS Independent'],
