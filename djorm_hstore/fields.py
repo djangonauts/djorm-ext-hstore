@@ -46,6 +46,14 @@ class HStoreDescriptor(models.fields.subclassing.Creator):
 
         obj.__dict__[self.field.name] = value
 
+    def __getstate__(self):
+        """
+        Returns pickable Python dict.
+        """
+        to_pickle = self.__dict__.copy()
+        del to_pickle['default']
+        return to_pickle
+
 
 class HStoreField(models.Field):
     _attribute_class = HStoreDictionary
