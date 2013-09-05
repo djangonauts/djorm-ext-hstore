@@ -86,11 +86,8 @@ class DictionaryField(HStoreField):
     description = _("A python dictionary in a postgresql hstore field.")
 
     def formfield(self, **params):
-        defaults = {
-            'form_class': forms.DictionaryField
-        }
-        defaults.update(params)
-        return super(DictionaryField, self).formfield(**defaults)
+        params.setdefault("form_class", forms.DictionaryField)
+        return super(DictionaryField, self).formfield(**params)
 
     def value_from_object(self, obj):
         """
@@ -121,11 +118,8 @@ class ReferencesField(HStoreField):
     description = _("A python dictionary of references to model instances in an hstore field.")
 
     def formfield(self, **params):
-        defaults = {
-            'form_class': forms.ReferencesField
-        }
-        defaults.update(params)
-        return super(ReferencesField, self).formfield(**defaults)
+        params.setdefault("form_class", forms.ReferencesField)
+        return super(ReferencesField, self).formfield(**params)
 
     def get_prep_lookup(self, lookup, value):
         return util.serialize_references(value) if isinstance(value, dict) else value
