@@ -4,6 +4,7 @@ from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
 
 from . import util
+from .widgets import KeyValueWidget
 import json
 
 
@@ -52,7 +53,7 @@ class DictionaryField(JsonMixin, Field):
     """
     def __init__(self, **params):
         defaults = {
-            'widget': DictionaryFieldWidget,
+            'widget': KeyValueWidget,
             'initial': u'{}',
         }
         defaults.update(params)

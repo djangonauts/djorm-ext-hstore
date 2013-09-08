@@ -1,10 +1,11 @@
+# -*- coding: utf-8 -*-
+import sys
+import json
 
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
 from . import forms, util
-import sys
-import json
 
 if sys.version_info[0] < 3:
     text_type = unicode
@@ -102,7 +103,10 @@ class DictionaryField(HStoreField):
 
     def to_python(self, value):
         if isinstance(value, util.string_type) and value:
-            return json.loads(value)
+            try:
+                return json.loads(value)
+            except ValueError:
+                return {}
         return value or {}
 
     def value_to_string(self, obj):
