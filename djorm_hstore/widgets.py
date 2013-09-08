@@ -2,7 +2,9 @@
 
 import json
 
+from django import forms
 from django.forms import widgets
+from django.contrib.admin.templatetags.admin_static import static
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext as _
 
@@ -15,6 +17,10 @@ class KeyValueWidget(widgets.MultiWidget):
     add_button_template = '<a href="javascript:void(0)" class="add_keyvaluewidget">' +\
                           '<img src="%(icon_url)s" width="10" height="10"> %(name)s</a>'
     remove_button_template = '<div class="field-box"><a class="inline-deletelink" href="javascript:void(0)">%s</a></div>'
+
+    @property
+    def media(self):
+        return forms.Media(js=[static("djorm_hstore/js/djorm_hstore.js")])
 
     def __init__(self, attrs=None, key_attrs=None, value_attrs=None):
         self.key_attrs = key_attrs or {}
