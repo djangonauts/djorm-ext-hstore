@@ -1,4 +1,5 @@
-django.jQuery(document).ready(function(){
+django.jQuery(function($){
+$(document).ready(function(){
     $('.add_keyvaluewidget').click(function(e){
         var $this = $(this),
             widget_block =$this.closest('.keyvaluewidget'),
@@ -25,3 +26,4 @@ django.jQuery(document).ready(function(){
         $(this).parent().parent().slideUp(function(){$(this).remove()});
     })
 });
+})
