@@ -42,7 +42,7 @@ class HStoreDescriptor(models.fields.subclassing.Creator):
     def __set__(self, obj, value):
         value = self.field.to_python(value)
 
-        if not isinstance(value, HStoreDictionary):
+        if isinstance(value, dict):
             value = self.field._attribute_class(value, self.field, obj)
 
         obj.__dict__[self.field.name] = value
@@ -102,11 +102,15 @@ class DictionaryField(HStoreField):
         return value
 
     def to_python(self, value):
+        if value is None:
+            return None
+
         if isinstance(value, util.string_type) and value:
             try:
                 return json.loads(value)
             except ValueError:
                 return {}
+
         return value or {}
 
     def value_to_string(self, obj):

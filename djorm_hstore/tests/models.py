@@ -14,6 +14,7 @@ class Ref(models.Model):
         'manager': False,
     }
 
+
 class DataBag(models.Model):
     name = models.CharField(max_length=32)
     data = DictionaryField(db_index=True)
@@ -26,6 +27,21 @@ class DataBag(models.Model):
 
     def __unicode__(self):
         return self.name
+
+
+class DataBagNullable(models.Model):
+    name = models.CharField(max_length=32)
+    data = DictionaryField(db_index=True, null=True)
+
+    objects = HStoreManager()
+
+    _options = {
+        'manager': False
+    }
+
+    def __unicode__(self):
+        return self.name
+
 
 class RefsBag(models.Model):
     name = models.CharField(max_length=32)

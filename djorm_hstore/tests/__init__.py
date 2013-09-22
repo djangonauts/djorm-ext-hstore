@@ -8,7 +8,7 @@ from django.core import serializers
 from ..functions import HstoreKeys, HstoreSlice, HstorePeek
 from ..expressions import HstoreExpression
 
-from .models import DataBag, Ref, RefsBag
+from .models import DataBag, Ref, RefsBag, DataBagNullable
 from .forms import DataBagForm
 
 
@@ -19,13 +19,13 @@ class TestModelForm(TestCase):
         bag_data = {'name': 'bag1', 'data': {}}
         form = DataBagForm(bag_data)
         self.assertFalse(form.is_valid())
-        self.assertEqual(form.errors, {'data': [u'String type is required.']})
+        self.assertEqual(form.errors, {'data': ['This field is required.']})
 
         # empty string is not json loadable
         bag_data = {'name': 'bag1', 'data': ""}
         form = DataBagForm(bag_data)
         self.assertFalse(form.is_valid())
-        self.assertEqual(form.errors, {'data': [u'Enter a valid value.']})
+        self.assertEqual(form.errors, {'data': ['This field is required.']})
 
         # data is a required field in the model
         bag_data = {'name': 'bag1', 'data': None}
@@ -66,11 +66,19 @@ class TestDictionaryField(TestCase):
         beta = DataBag.objects.create(name='beta', data={'v': '2', 'v2': '4'})
         return alpha, beta
 
+    def _create_bag_with_none(self):
+        return DataBagNullable.objects.create(name='alpha', data=None)
+
     def _create_bitfield_bags(self):
         # create dictionaries with bits as dictionary keys (i.e. bag5 = { 'b0':'1', 'b2':'1'})
         for i in range(10):
             DataBag.objects.create(name='bag%d' % (i,),
                data=dict(('b%d' % (bit,), '1') for bit in range(4) if (1 << bit) & i))
+
+    def test_null_values(self):
+        bag = self._create_bag_with_none()
+        bag = DataBagNullable.objects.get(pk=bag.pk)
+        self.assertEqual(bag.data, None)
 
     def test_regression_handler(self):
         self._create_bags()
