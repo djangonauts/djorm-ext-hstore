@@ -142,5 +142,6 @@ class ReferencesField(HStoreField):
 try:
     from south.modelsinspector import add_introspection_rules
     add_introspection_rules(rules=[], patterns=['djorm_hstore.fields\.DictionaryField'])
+    add_introspection_rules(rules=[], patterns=['djorm_hstore.fields\.ReferencesField'])
 except ImportError:
     pass
