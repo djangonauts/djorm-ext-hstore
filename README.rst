@@ -2,6 +2,8 @@
 djorm-ext-hstore
 ================
 
+This library is now **DEPRECATED** in favor of `django-hstore <https://github.com/djangonauts/django-hstore>`_
+
 Is the library which integrates the hstore extension of PostgreSQL into Django,
 
 Compatible with:
